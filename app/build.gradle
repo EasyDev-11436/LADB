@@ -25,6 +25,9 @@ android {
             storePassword '345y45Fuck'
             keyAlias 'eeasydev'
             keyPassword '345y45Fuck'
+
+            v1SigningEnabled true
+            v2SigningEnabled true
         }
     }
 
