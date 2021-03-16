@@ -17,15 +17,29 @@ android {
         ndk {
             abiFilters 'arm64-v8a', 'armeabi-v7a'
         }
+
+        signingConfigs {
+        release {
+            storeFile file("6050c57221874.keystore")
+            storePassword '345y45Fuck'
+            keyAlias 'eeasydev'
+            keyPassword '345y45Fuck'
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    debug {
+        debuggable true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
