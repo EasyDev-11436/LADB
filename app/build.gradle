@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "com.draco.ladb"
