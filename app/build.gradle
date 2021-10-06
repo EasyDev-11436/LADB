@@ -54,6 +54,9 @@ android {
     lintOptions {
         baseline(file("lint-baseline.xml"))
     }
+    lint {
+          baseline = file("lint-baseline.xml")
+      }
 }
 
 dependencies {
