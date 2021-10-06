@@ -1,7 +1,11 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
+    id 'kotlin-android-extensions'
     id 'com.google.android.gms.oss-licenses-plugin'
+}
+
+androidExtensions {
+    experimental = true
 }
 
 android {
