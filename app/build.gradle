@@ -19,29 +19,12 @@ android {
         }
     }
 
-    signingConfigs {
-        release {
-            storeFile file("6050c57221874.keystore")
-            storePassword '345y45Fuck'
-            keyAlias 'eeasydev'
-            keyPassword '345y45Fuck'
-
-            v1SigningEnabled true
-            v2SigningEnabled true
-        }
-    }
-
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
-            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-
-    debug {
-        debuggable true
     }
 
     compileOptions {
