@@ -1,5 +1,4 @@
 plugins {
-    kotlin("android.extensions")
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.android.gms.oss-licenses-plugin'
@@ -51,9 +50,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-    }
-    buildFeatures {
-        viewBinding = true
     }
 }
 
