@@ -22,10 +22,10 @@ jobs:
         # Or 1.7 | 1.9 | 11
     - name: Make Gradle executable
       run: chmod +x ./gradlew
-    - name: Build with Gradle
-      run: ./gradlew build
-    - name: Checking Files
-      run: find -name *.apk
+    # - name: Build with Gradle
+    #  run: ./gradlew build
+    # - name: Checking Files
+    #  run: find -name *.apk
     - name: Setup requires tool for uploading
       run: pip install mega.py
     - name: Uploading APKs
