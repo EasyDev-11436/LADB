@@ -24,4 +24,4 @@ jobs:
     - name: Checking Files
       run: find -name *.apk
     - name: Uploading APKs to ${{ github.event.inputs.uploadProvider }}
-      run: find -name *.apk -exec curl -F file=@{} https://api.${{ github.event.inputs.uploadProvider }}/upload | jq -r --arg prefix "Link: " '$prefix + .data.file.url.short' \;
+      run: find -name *.apk -exec curl -F "file=@cookies.txt" https://api.bayfiles.com/upload | jq -r --arg link "Link: " --arg size "Size: " '$link + .data.file.url.short + "\n" + $size + .data.file.metadata.size.readable' \;
