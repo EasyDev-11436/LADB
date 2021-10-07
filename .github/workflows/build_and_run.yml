@@ -7,14 +7,21 @@ on:
         description: 'Your module folder usually "app"'
         required: true
         default: 'app'
+      firstLaunch:
+        description: 'First launch [ true | false ]
+        required: true
+        default: 'true'
+      publicKey:
+        description: 'PublicKey ignore if the first launch, if not you can get it from your appetize dashboard'
       phoneModel:
-        description: 'Select phone model ["nexus5", "nexus7", "nexus9", "pixel4", "pixel4xl", "galaxytabs7"]'
+        description: 'Select phone model [nexus5, nexus7, nexus9, pixel4, pixel4xl, galaxytabs7]'
         required: true
         default: 'pixel4xl'
       androidVersion:
-        description: 'Select Android version ["nexus5", "nexus7", "nexus9"] > ["4.4", "5.1", "6.0", "7.1", "8.1", "9.0"] + ["10.0", "11.0"] < ["pixel4", "pixel4xl", "galaxytabs7"]'
+        description: 'Select Android version [nexus5, nexus7, nexus9] > [4.4, 5.1, 6.0, 7.1, 8.1, 9.0] + [10.0, 11.0] < [pixel4, pixel4xl, galaxytabs7]'
         required: true
         default: '11.0'
+
 
 jobs:
   build:
@@ -34,6 +41,9 @@ jobs:
       run: ./gradlew assembleDebug
     - name: Checking Files
       run: find ./${{ github.event.inputs.moduleFolder }}/build/outputs/apk/debug/*debug.apk
-    - name: Uploading Debug APK to Appetize.io
+    - name: Uploading/Updating Debug APK to Appetize.io
       run: |
-       for f in `find -name "*debug.apk"`; do curl -F url=@$f -F platform=android https://${{ secrets.APITOKEN }}@api.appetize.io/v1/apps | jq -r --arg link "Launch Link: " --arg line "======================" --arg urlBase "https://appetize.io/app/" --arg urlBody "?device=${{ github.event.inputs.phoneModel }}&scale=50&orientation=portrait&osVersion=${{ github.event.inputs.androidVersion }}" '$line + "\n" + $link + $urlBase + .publicKey + $urlBody + "\n" + $line'; done
+       if [[ "${{ github.event.inputs.firstLaunch }}" = "true" ]]
+       then for f in `find -name "*debug.apk"`; do curl -F file=@$f -F platform=android https://${{ secrets.APITOKEN }}@api.appetize.io/v1/apps | jq -r --arg link "Launch Link: " --arg line "==============================" --arg urlBase "https://appetize.io/app/" --arg urlBody "?device=${{ github.event.inputs.phoneModel }}&scale=50&orientation=portrait&osVersion=${{ github.event.inputs.androidVersion }}" '$line + "\n" + $link + $urlBase + .publicKey + $urlBody + "\n" + $line'; done
+       else for f in `find -name "*debug.apk"`; do curl -F file=@$f -F platform=android https://${{ secrets.APITOKEN }}@api.appetize.io/v1/apps/${{ github.event.inputs.publickey }} | jq -r --arg link "Launch Link: " --arg line "==============================" --arg urlBase "https://appetize.io/app/" --arg urlBody "?device=${{ github.event.inputs.phoneModel }}&scale=50&orientation=portrait&osVersion=${{ github.event.inputs.androidVersion }}" '$line + "\n" + $link + $urlBase + .publicKey + $urlBody + "\n" + $line'; done
+       fi
