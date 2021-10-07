@@ -1,0 +1,22 @@
+name: Shell Sandbox
+
+on:
+  workflow_dispatch:
+    inputs:
+      uploadProvider:
+        description: 'mega.nz, anonfiles.com'
+        required: true
+        default: 'anonfiles.com'
+
+
+jobs:
+  sandbox:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+        if [[ "${{ github.event.inputs.uploadProvider }} = "anonfiles.com" ]]
+        then
+          echo "yes"
+        else
+          echo "no"
+        fi
