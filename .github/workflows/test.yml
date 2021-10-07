@@ -18,7 +18,7 @@ jobs:
         run: |
         if [[ "${{ github.event.inputs.uploadProvider }} = "anonfiles.com" ]]
         then
-          echo "yes"
+        echo "yes"
         else
-          echo "no"
+        echo "no"
         fi
