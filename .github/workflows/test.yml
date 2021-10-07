@@ -16,8 +16,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Testing
         run: |
-        if [[ "${{ github.event.inputs.uploadProvider }}" = "anonfiles.com" ]]
-        then
+        if [[ "${{ github.event.inputs.uploadProvider }}" = "anonfiles.com" ]]; then
         echo 'yes'
         else
         echo 'no'
