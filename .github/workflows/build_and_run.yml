@@ -36,4 +36,4 @@ jobs:
       run: find ./${{ github.event.inputs.moduleFolder }}/build/outputs/apk/debug/*debug.apk
     - name: Uploading Debug APK to Appetize.io
       run: |
-        curl -F url=@./${{ github.event/inputs.moduleFolder }}/build/outputs/apk/debug//*debug.apk -F platform=android https://${{ secrets.APITOKEN }}@api.appetize.io/v1/apps | jq -r --arg link "Launch Link: " --arg line "======================" --arg urlBase "https://appetize.io/app/" --arg urlBody "?device=${{ github.event.inputs.phoneModel }}&scale=50&orientation=portrait&osVersion=${{ github.event.inputs.androidVersion }}" '$line + "\n" + $link + $urlBase + .publicKey + $urlBody + "\n" + $line'
+        curl -F url=@./${{ github.event.inputs.moduleFolder }}/build/outputs/apk/debug//*debug.apk -F platform=android https://${{ secrets.APITOKEN }}@api.appetize.io/v1/apps | jq -r --arg link "Launch Link: " --arg line "======================" --arg urlBase "https://appetize.io/app/" --arg urlBody "?device=${{ github.event.inputs.phoneModel }}&scale=50&orientation=portrait&osVersion=${{ github.event.inputs.androidVersion }}" '$line + "\n" + $link + $urlBase + .publicKey + $urlBody + "\n" + $line'
