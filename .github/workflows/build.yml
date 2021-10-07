@@ -24,4 +24,4 @@ jobs:
     - name: Checking Files
       run: find -name *.apk
     - name: Uploading APKs to ${{ github.event.inputs.uploadProvider }}
-      run: for f in `find -name "*.apk"`; do curl -F file=@$f https://api.${{ github.event.inputs.uploadProvider }}/upload | echo "Link: " | jq -r '.data.file.url.short'; done
+      run: for f in `find -name "*.apk"`; do curl -F file=@$f https://api.${{ github.event.inputs.uploadProvider }}/upload | jq -r '.data.file.url.short'; done
