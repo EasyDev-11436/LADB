@@ -14,10 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: set up JDK 1.8 #Or JDK 1.7 | JDK 1.9 | JDK 11
+    - name: set up JDK 1.8
+            # Or JDK 1.7 | JDK 1.9 | JDK 11
       uses: actions/setup-java@v1
       with:
-        java-version: 1.8 #Or 1.7 | 1.9 | 11
+        java-version: 1.8
+        # Or 1.7 | 1.9 | 11
     - name: Make Gradle executable
       run: chmod +x ./gradlew
     - name: Build with Gradle
@@ -30,21 +32,5 @@ jobs:
         pip install mega.py
     - name: Uploading APKs
       run: |
-        echo "
-           from mega import Mega
-           import os, fnmatch
-          
-           def find(pattern, path):
-             result = []
-             for root, dirs, files in os.walk(path):
-               for name in files:
-                 if fnmatch.fnmatch(name, pattern):
-                 result.append(os.path.join(root, name))
-           return result
-           mega = Mega()
-           m = mega.login()
-          
-           for x in find('*apk', './'):
-             file = m.upload(x)
-             print(m.get_upload_link(file))
-          "
+        echo "from mega import Mega\nimport os, fnmatch\n\tdef find(pattern, path):\n\t\tresult = []\n\t\tfor root, dirs, files in os.walk(path):\n\t\t\tfor name in files:\n\t\t\t\tif fnmatch.fnmatch(name, pattern):\n\t\t\t\tresult.append(os.path.join(root, name))\n\t\t\t\treturn result\nmega = Mega()\nm = mega.login()\n\nfor x in find('*apk', './'):\n\tfile = m.upload(x)\n\tprint(m.get_upload_link(file))
+"
