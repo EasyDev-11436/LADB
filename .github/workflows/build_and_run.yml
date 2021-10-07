@@ -12,7 +12,7 @@ on:
         required: true
         default: 'pixel4xl'
       androidVersion:
-        description: 'Select Android version ["nexus5", "nexus7", "nexus9"] > ["4.4", "5.1", "6.0", "7.1", "8.1", "9.0"] + ["10.0", "11.0"] < ["pixel4", "pixel4xl", "galaxytabs7"]
+        description: 'Select Android version ["nexus5", "nexus7", "nexus9"] > ["4.4", "5.1", "6.0", "7.1", "8.1", "9.0"] + ["10.0", "11.0"] < ["pixel4", "pixel4xl", "galaxytabs7"]'
         default: '11.0'
 
 jobs:
