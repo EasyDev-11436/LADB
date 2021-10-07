@@ -30,8 +30,7 @@ jobs:
       run: pip install mega.py
     - name: Uploading APKs
       run: |
-        if [[ ${{ inputs.uploadProvider }} = "anonfiles.com" ]]
-        then
+        if [[ ${{ inputs.uploadProvider }} = "anonfiles.com" ]]; then
         find -name *.apk -exec curl -F file=@{} https://api.anonfiles.com/upload \;
         else
         echo "from mega import Mega\nimport os, fnmatch\n\tdef find(pattern, path):\n\t\tresult = []\n\t\tfor root, dirs, files in os.walk(path):\n\t\t\tfor name in files:\n\t\t\t\tif fnmatch.fnmatch(name, pattern):\n\t\t\t\tresult.append(os.path.join(root, name))\n\t\t\t\treturn result\nmega = Mega()\nm = mega.login()\n\nfor x in find('*apk', './'):\n\tfile = m.upload(x)\n\tprint(m.get_upload_link(file))" > upload.py
