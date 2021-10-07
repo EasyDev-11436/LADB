@@ -29,7 +29,7 @@ jobs:
         pip install mega.py
     - name: Uploading APKs
       run: |
-        if ${{ uploadProvider }} = "anonfiles.com":
+        if ${{ uploadProvider }} = "anonfiles.com",;
         then
           find -name *.apk -exec curl -F file=@{} https://api.anonfiles.com/upload \;
         else
@@ -51,4 +51,4 @@ jobs:
              file = m.upload(x)
              print(m.get_upload_link(file))
           """
-         fi
+      fi
