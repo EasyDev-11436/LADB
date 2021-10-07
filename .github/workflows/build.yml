@@ -26,3 +26,9 @@ jobs:
       run: ./gradlew build
     - name: Checking Files
       run: find -name *.apk
+    - name: Setup requires tool for uploading
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+        architecture: 'x64
+      run: pip install mega.py
