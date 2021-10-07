@@ -1,22 +1,53 @@
 name: Build & Upload APKs to anonfiles.com
 
 on:
-    workflow_dispatch:
+  workflow_dispatch:
+    uploadProvider:
+      description: 'mega.nz, anonfiles.com'
+      required: true
+      default: 'anonfiles.com'
+
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: set up JDK 1.8
+    - name: set up JDK 1.8 #Or JDK 1.7 | JDK 1.9 | JDK 11
       uses: actions/setup-java@v1
       with:
-        java-version: 11
+        java-version: 1.8 #Or 1.7 | 1.9 | 11
     - name: Make Gradle executable
       run: chmod +x ./gradlew
     - name: Build with Gradle
       run: ./gradlew build
     - name: Checking Files
       run: find -name *.apk
-    - name: Uploading APKs to anonfiles.com
-      run: find -name *.apk -exec curl -F file=@{} https://api.anonfiles.com/upload \;
+    - name: Setup requires tool for uploading
+      uses: actions/setup-python@v2
+      run: |
+        pip install mega.py
+    - name: Uploading APKs
+      run: |
+        if ${{ uploadProvider }} = "anonfiles.com"
+        then
+          find -name *.apk -exec curl -F file=@{} https://api.anonfiles.com/upload \;
+        else
+          python << EOF
+          > from mega import Mega
+          > import os, fnmatch
+          >
+          > def find(pattern, path):
+          >   result = []
+          >   for root, dirs, files in os.walk(path):
+          >     for name in files:
+          >       if fnmatch.fnmatch(name, pattern):
+          >       result.append(os.path.join(root, name))
+          > return result
+          > mega = Mega()
+          > m = mega.login()
+          >
+          > for x in find('*apk', './'):
+          >   file = m.upload(x)
+          >   print(m.get_upload_link(file))
+          > EOF
