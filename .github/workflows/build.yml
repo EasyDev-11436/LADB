@@ -31,4 +31,3 @@ jobs:
       with:
         python-version: '3.x'
         architecture: 'x64
-      run: pip install mega.py
