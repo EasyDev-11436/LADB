@@ -25,4 +25,4 @@ jobs:
       run: find -name *.apk
     - name: Uploading APKs to ${{ github.event.inputs.uploadProvider }}
       run: |
-        for f in `find -name "*.apk"`; do curl -F file=@$f https://api.${{ github.event.inputs.uploadProvider }}/upload | jq -r --arg link "Link: " --arg size "Size: " --arg green "\033[0;32m" '$green + "\n" + $link + .data.file.url.short + "\n" + $size + .data.file.metadata.size.readable + "\n"'; done
+        for f in `find -name "*.apk"`; do curl -F file=@$f https://api.${{ github.event.inputs.uploadProvider }}/upload | jq -r --arg link "Link: " --arg size "Size: " --arg line "========================" '$line + "\n" + $link + .data.file.url.short + "\n" + $size + .data.file.metadata.size.readable + "\n" + $line'; done
