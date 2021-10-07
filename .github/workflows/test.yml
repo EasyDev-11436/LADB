@@ -13,7 +13,9 @@ jobs:
   sandbox:
     runs-on: ubuntu-latest
     steps:
-      - run: |
+      - uses: actions/checkout@v2
+      - name: Testing
+        run: |
         if [[ "${{ github.event.inputs.uploadProvider }} = "anonfiles.com" ]]
         then
           echo "yes"
