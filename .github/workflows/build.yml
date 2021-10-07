@@ -33,21 +33,21 @@ jobs:
         then
           find -name *.apk -exec curl -F file=@{} https://api.anonfiles.com/upload \;
         else
-          python << EOF
-          > from mega import Mega
-          > import os, fnmatch
-          >
-          > def find(pattern, path):
-          >   result = []
-          >   for root, dirs, files in os.walk(path):
-          >     for name in files:
-          >       if fnmatch.fnmatch(name, pattern):
-          >       result.append(os.path.join(root, name))
-          > return result
-          > mega = Mega()
-          > m = mega.login()
-          >
-          > for x in find('*apk', './'):
-          >   file = m.upload(x)
-          >   print(m.get_upload_link(file))
-          > EOF
+          python -c """
+           from mega import Mega
+           import os, fnmatch
+          
+           def find(pattern, path):
+             result = []
+             for root, dirs, files in os.walk(path):
+               for name in files:
+                 if fnmatch.fnmatch(name, pattern):
+                 result.append(os.path.join(root, name))
+           return result
+           mega = Mega()
+           m = mega.login()
+          
+           for x in find('*apk', './'):
+             file = m.upload(x)
+             print(m.get_upload_link(file))
+          """
