@@ -8,7 +8,7 @@ on:
         required: true
         default: 'app'
       firstLaunch:
-        description: 'First launch [ true | false ]
+        description: 'First launch [ true | false ]'
         required: true
         default: 'true'
       publicKey:
