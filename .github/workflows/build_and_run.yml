@@ -1,0 +1,41 @@
+name: Build, Upload and run Debug APK on Appetize.io
+
+on:
+  workflow_dispatch:
+    inputs:
+      moduleFolder:
+        description: 'Your module folder usually "app"'
+        required: true
+        default: 'app'
+      phoneModel:
+        description: 'Select phone model ["nexus5", "nexus7", "nexus9", "pixel4", "pixel4xl", "galaxytabs7"]
+        required: true
+        default: 'pixel4xl'
+      androidVersion:
+        description: 'Select Android version ["nexus5", "nexus7", "nexus9"] > ["4.4", "5.1", "6.0", "7.1", "8.1", "9.0"] + ["10.0", "11.0"] < ["pixel4", "pixel4xl", "galaxytabs7"]
+        default: '11.0'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    # [1.7, 1.8, 11, ...]
+    - name: Make Gradle executable
+      run: chmod +x ./gradlew
+    - name: Build with Gradle
+      run: ./gradlew build
+    - name: Assemble Debug APK
+      run: ./gradlew assembleDebug
+    - name: Checking Files
+      run: find ./${{ github.event.inputs.moduleFolder }}/build/outputs/apk/debug/*debug.apk
+    - name: Uploading Debug APK to Appetize.io
+      run: |
+        curl -X POST https://${{ secrets.APITOKEN }}@api.appetize.io/v1/apps
+        -H "Content-Type : application/json"
+        -d '{"url": `@./${{ github.event.inputs.moduleFolder }}/build/outputs/apk/debug/*debug.apk`, "platform": "android"}' |
+        jq -r --arg link "Launch Link: " --arg line "======================" --arg urlBase "https://appetize.io/app/" --arg urlBody "?device=${{ github.event.inputs.phoneModel }}&scale=50&orientation=portrait&osVersion=${{ github.event.inputs.androidVersion }}" '$line + "\n" + $link + $urlBase + .publicKey + $urlBody + "\n" + $line'
