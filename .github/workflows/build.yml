@@ -16,9 +16,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: Setup requires tool for uploading
       uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-        architecture: 'x64
     - name: set up JDK 1.8
             # Or JDK 1.7 | JDK 1.9 | JDK 11
       uses: actions/setup-java@v1
