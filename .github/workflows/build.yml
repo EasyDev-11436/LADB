@@ -2,10 +2,11 @@ name: Build & Upload APKs to anonfiles.com
 
 on:
   workflow_dispatch:
-    uploadProvider:
-      description: 'mega.nz, anonfiles.com'
-      required: true
-      default: 'anonfiles.com'
+    inputs:
+      uploadProvider:
+        description: 'mega.nz, anonfiles.com'
+        required: true
+        default: 'anonfiles.com'
 
 
 jobs:
