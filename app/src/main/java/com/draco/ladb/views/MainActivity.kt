@@ -1,16 +1,21 @@
 package com.draco.ladb.views
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
+import android.app.AlertDialog
 import android.view.*
 import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
 import android.widget.ScrollView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
 import androidx.preference.PreferenceManager
 import com.draco.ladb.BuildConfig
@@ -23,6 +28,8 @@ import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.*
 import java.util.concurrent.CountDownLatch
 import kotlin.system.exitProcess
+
+const val ALL_FILES_ACCESS_PERMISSION = 4
 
 class MainActivity : AppCompatActivity() {
     /* View Model */
@@ -50,6 +57,19 @@ class MainActivity : AppCompatActivity() {
         output = findViewById(R.id.output)
         outputScrollView = findViewById(R.id.output_scrollview)
         progress = findViewById(R.id.progress)
+
+        val permissionsToRequire = ArrayList<String>()
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionsToRequire.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionsToRequire.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+        if (permissionsToRequire.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, permissionsToRequire.toTypedArray(), 0)
+        }
+
+        requestAllFilesAccessPermission()
 
         pairDialog = MaterialAlertDialogBuilder(this)
             .setTitle(R.string.pair_title)
@@ -171,6 +191,34 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             .show()
+    }
+
+    private fun requestAllFilesAccessPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R || Environment.isExternalStorageManager()) {
+            Toast.makeText(this, "Access all files on external storage has been granted", Toast.LENGTH_SHORT).show()
+        } else {
+            val builder = AlertDialog.Builder(this)
+                .setTitle("Tip")
+                .setMessage("Need permission to access all files on external storage")
+                .setPositiveButton("OK") { _, _ ->
+                    val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                    startActivityForResult(intent, ALL_FILES_ACCESS_PERMISSION)
+                }
+                .setNegativeButton("Cancel", null)
+            builder.show()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 0) {
+            for (result in grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "You must allow all the permissions.", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
